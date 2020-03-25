@@ -31,13 +31,24 @@ def distinct(iterable: Iterable):
     return temp_list
 
 
-# def groupby(key, iterable: Iterable):
-#     # 4) функция делает из неупорядоченной последовательностей словарей,
-#     # словарь сгруппированный по ключу
+def groupby(key, iterable: Iterable):
+    # 4) функция делает из неупорядоченной последовательностей словарей,
+    #    словарь сгруппированный по ключу
+    result_dict = dict()
+    for i in iterable:
+        # print('value of i: ', i)
+        key_value = i[key]
+        # print('value of key: ', key_value)
+        if key_value not in result_dict:
+            result_dict[key_value] = []
+            result_dict[key_value].append(i)
+        else:
+            result_dict[key_value].append(i)
+    return result_dict
 
 
 def chunks(size: int, iterable: Iterable):
-    # 5) функцию, которая разобьет последовательность на заданные куски
+    # 5) функция, которая разобьет последовательность на заданные куски
     temp_list = list()
     result_list = list()
     n = 0
@@ -70,7 +81,8 @@ def last(iterable: Iterable):
     else:
         return iterable[len(iterable)-1]
 
-
+############################################################
+# проверки:
 test_list_1 = [-1, 0, 7, 8, [1, [2, 3]], 11, 12]
 test_list_2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 test_list_3 = ['a', 'b', 'c', 'd', 'e', 'f']
@@ -87,3 +99,12 @@ print('проверка функции first: ', first(range(0)))
 print()
 print('проверка функции last: ', last(range(0)))
 print('проверка функции last: ', last(test_list_3))
+
+users = [
+        {'gender': 'female', 'age': 33},
+        {'gender': 'male', 'age': 20},
+        {'gender': 'female', 'age': 21},
+]
+print()
+print('функция groupby: ', groupby('gender', users))
+print('функция groupby: ', groupby('age', users))
