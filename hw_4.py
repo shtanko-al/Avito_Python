@@ -82,6 +82,22 @@ def last(iterable: Iterable):
         return None
     else:
         return iterable[len(iterable)-1]
+    
+def last_2(iterable: Iterable):
+    #  7) функция получения последнего элемента или None
+    # теперь работает с генераторами, но, наверно, можно лучше сделать
+    my_iterator = iter(iterable)
+    n = 0
+    while True:
+        try:
+            temp = next(my_iterator)
+            # print(temp)
+            n += 1
+        except StopIteration:
+            if n == 0:
+                return None
+            else:
+                return temp
 
 ############################################################
 # проверки:
@@ -99,8 +115,9 @@ print('проверка функции first: ', first(foo))
 print('проверка функции first: ', first(test_list_3))
 print('проверка функции first: ', first(range(0)))
 print()
-print('проверка функции last: ', last(range(0)))
-print('проверка функции last: ', last(test_list_3))
+print('проверка функции last: ', last_2(range(0)))
+print('проверка функции last: ', last_2(foo))
+print('проверка функции last: ', last_2(test_list_3))
 
 users = [
         {'gender': 'female', 'age': 33},
