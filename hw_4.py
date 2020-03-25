@@ -78,6 +78,7 @@ def first(iterable: Iterable):
 
 def last(iterable: Iterable):
     #  7) функция получения последнего элемента или None
+    #     не работает с конструкторами
     if len(iterable) == 0:
         return None
     else:
@@ -99,6 +100,14 @@ def last_2(iterable: Iterable):
             else:
                 return temp
 
+def last_3(iterable: Iterable):
+    #  7) функция получения последнего элемента или None
+    i = 0  # это для объявления переменной, (законно ли это? :) )
+    for i in iterable:
+        pass
+    return i
+
+
 ############################################################
 # проверки:
 test_list_1 = [-1, 0, 7, 8, [1, [2, 3]], 11, 12]
@@ -115,9 +124,9 @@ print('проверка функции first: ', first(foo))
 print('проверка функции first: ', first(test_list_3))
 print('проверка функции first: ', first(range(0)))
 print()
-print('проверка функции last: ', last_2(range(0)))
-print('проверка функции last: ', last_2(foo))
-print('проверка функции last: ', last_2(test_list_3))
+print('проверка функции last: ', last_3(range(0)))
+print('проверка функции last: ', last_3(foo))
+print('проверка функции last: ', last_3(test_list_3))
 
 users = [
         {'gender': 'female', 'age': 33},
