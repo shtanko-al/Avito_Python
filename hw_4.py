@@ -69,9 +69,8 @@ def chunks(size: int, iterable: Iterable):
 
 def first(iterable: Iterable):
     # 6) функция получения первого элемента или None
-    my_iterator = iter(iterable)
     try:
-        return next(my_iterator)
+        return next(iter(iterable))
     except StopIteration:
         return None
 
