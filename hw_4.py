@@ -57,6 +57,8 @@ def chunks(size: int, iterable: Iterable):
         n += 1
         if n == size:
             temp_list_2 = deepcopy(temp_list)
+            # возможно использование deepcopy это моветон
+            # и надо более алгоритмически сделать
             result_list.append(temp_list_2)
             temp_list.clear()
             n = 0
