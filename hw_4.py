@@ -73,7 +73,7 @@ def first(iterable: Iterable):
     try:
         return next(my_iterator)
     except StopIteration:
-        return
+        return None
 
 
 def last(iterable: Iterable):
