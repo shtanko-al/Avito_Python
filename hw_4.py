@@ -101,7 +101,7 @@ def last_2(iterable: Iterable):
 
 def last_3(iterable: Iterable):
     #  7) функция получения последнего элемента или None
-    i = 0  # это для объявления переменной, (законно ли это? :) )
+    i = None
     for i in iterable:
         pass
     return i
