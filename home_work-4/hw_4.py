@@ -77,7 +77,7 @@ def first(iterable: Iterable):
 
 def last(iterable: Iterable):
     #  7) функция получения последнего элемента или None
-    #     не работает с конструкторами
+    #     не работает с генераторами
     if len(iterable) == 0:
         return None
     else:
