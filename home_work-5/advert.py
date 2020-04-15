@@ -97,9 +97,28 @@ class Advert:
         """
         Вспомогательный класс для класса Advert
         """
+
         def __init__(self, d: dict):
             for k, v in d.items():
                 self.__dict__[k] = v
+
+
+class ColorizeMixin:
+    # color_code = {
+    #     'red': 31,
+    #     'green': 32,
+    #     'yellow': 33,
+    # }
+
+    # def __init__(self, color: str):
+    #     self.repr_color_code = self.color_code[color]
+
+    def __repr__(self):
+        return f'\033[1;33;40m{self.title} | {self.price} ₽'
+
+
+class ColorAdvert(ColorizeMixin, Advert):
+    pass
 
 
 if __name__ == '__main__':
@@ -128,16 +147,27 @@ if __name__ == '__main__':
             "Пушкинская"]
             }
         }"""
+    adv_1 = """{
+        "title": "car",
+        "price": 100500,
+        "text": "едет с трудом",
+        "location": {
+            "address": "город Cходня, Лесная, 7",
+            "metro_stations": ["Речной Вокзал"]
+            }
+        }"""
 
-    # print(type(lesson_str))
-    my_advert_1 = Advert(lesson_str)
+    my_advert_2 = ColorAdvert(adv_1)
+    print(my_advert_2)
+
+    # my_advert_1 = Advert(lesson_str)
     # print(type(my_advert_1))
-    print(my_advert_1.__dict__)
-    print(my_advert_1.location.metro_stations)
+    # print(my_advert_1.__dict__)
+    # print(my_advert_1.location.metro_stations)
     # print(my_advert_1.title)
     # print(f'цена: {my_advert_1.price}')
-    print(my_advert_1.__repr__())
+    # print(my_advert_1)
 
-    print('\nатрибуты:')
-    for a in my_advert_1.get_atr():
-        print('\t', a)
+    # print('\nатрибуты:')
+    # for a in my_advert_1.get_atr():
+    #     print('\t', a)
