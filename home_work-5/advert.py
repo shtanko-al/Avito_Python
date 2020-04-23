@@ -8,6 +8,7 @@ class AdvertRecurs:
     глубина вложенности бесконечная, вложенные типы - объекты класса AdvertRec
     (нет проверок, но интересно получилось)
     """
+
     def __init__(self, data_adv: str or dict):
         if type(data_adv) == str:
             atr_data = json.loads(data_adv)
@@ -21,8 +22,7 @@ class AdvertRecurs:
                 self.__dict__[key] = value
 
     def __repr__(self):
-        r = " | ".join(self.__dict__)
-        return f'{r}'
+        return " | ".join(self.__dict__)
 
 
 class Advert:
@@ -31,6 +31,7 @@ class Advert:
     с необходимыми атрибутами (атрибуты 'title' и 'price' есть есть всегда)
     бесконечная глубина вложенности
     """
+
     def __init__(self, json_str: json or str):
         self.title = None
         self.price = 0
@@ -54,24 +55,34 @@ class Advert:
     def __repr__(self):
         return f'{self.title} | {self.price} ₽'
 
-    class Pole:
-        """Вспомогательный класс для класса Advert"""
-        def __init__(self, d: dict):
-            for key, value in d.items():
-                if type(value) == dict:
-                    self.__dict__[key] = self.Pole(value)
-                else:
-                    self.__dict__[key] = value
 
-        def __repr__(self):
-            r = " | ".join(self.__dict__)
-            return f'{r}'
+class Pole:
+    """Вспомогательный класс для класса Advert"""
 
+    def __init__(self, d: dict):
+        for key, value in d.items():
+            if type(value) == dict:
+                self.__dict__[key] = Pole(value)
+            else:
+                self.__dict__[key] = value
 
-class ColorizeMixin:
     def __repr__(self):
-        super()
-        return f'\033[1;33;40m{self.title} | {self.price} ₽'
+        return " | ".join(self.__dict__)
+
+
+class ColorizeMixin(Advert):
+    # color_code = {
+    #     'red': 31,
+    #     'green': 32,
+    #     'yellow': 33,
+    # }
+
+    # def __init__(self, color: str):
+    #     self.repr_color_code = self.color_code[color]
+
+    def __repr__(self):
+        super(Advert, self).__repr__()
+        return f'\033[1;33;40m{self.title} | {self.price} ₽\033[1;00;00m'
 
 
 class ColorAdvert(ColorizeMixin, Advert):
@@ -136,8 +147,8 @@ if __name__ == '__main__':
             }
         }"""
 
-    # my_advert_1 = ColorAdvert(adv_dict_1)
-    # print(my_advert_1)
+    my_advert_1 = ColorAdvert(adv_dict_1)
+    print(my_advert_1)
 
     # my_advert_2 = AdvertRec(adv_str_1)
     # print(my_advert_2.location)
