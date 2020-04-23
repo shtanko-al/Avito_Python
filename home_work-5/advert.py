@@ -1,75 +1,51 @@
 import json
 
 
-class AdvertRec:
+class AdvertRecurs:
     """
     Класс принимает json или словарь и генерирует объекты класса
     с атрибутами взятыми из json'на или словаря
-    глубина вложенности бесконечная, вложенные типы класса AdvertRec
+    глубина вложенности бесконечная, вложенные типы - объекты класса AdvertRec
+    (нет проверок, но интересно получилось)
     """
-
-    def __init__(self, json_str: json or str):
-        # self.title = None
-        # self.price = 0
-        if type(json_str) == str:
-            atr_data = json.loads(json_str)
+    def __init__(self, data_adv: str or dict):
+        if type(data_adv) == str:
+            atr_data = json.loads(data_adv)
         else:
-            atr_data = json_str
+            atr_data = data_adv
+
         for key, value in atr_data.items():
             if type(value) == dict:
-                self.__dict__[key] = Advert(value)
+                self.__dict__[key] = AdvertRecurs(value)
             else:
                 self.__dict__[key] = value
-        # p = self.__dict__.setdefault('price', 0)
-        if self.__dict__.setdefault('price', 0) < 0:
-            raise ValueError('Ошибка: цена меньше 0')
 
-    # def __repr__(self):
-    #     t = self.__dict__['title']
-    #     p = self.__dict__['price']
-    #     return f'{t} | {p} ₽'
-
-    def get_atr(self, t=None):  # надо допилить
-        if t is None:
-            temp_dict = self.__dict__
-        else:
-            temp_dict = t
-        for key, value in temp_dict.items():
-            if type(value) == dict:
-                self.get_atr(t=value)
-            else:
-                yield key
-        # return self.__dict__.keys()
-
-    # def zap_pole(self, key, value):
-    #     if type(value) != dict:
-    #         self.__dict__[key] = value
-    #     else:
-    #         if type(value) == dict:
-    #             self.zap_pole(self, value.items())
-    #         else:
-    #             self.__dict__[key] = Pole(value)
+    def __repr__(self):
+        r = " | ".join(self.__dict__)
+        return f'{r}'
 
 
 class Advert:
     """
-    Класс принимает json или словарь и генерирует объекты класса
-    с атрибутами взятыми из json'на или словаря
-    (атрибуты 'title' и 'price' есть есть всегда)
+    Класс принимает json-строку или словарь и генерирует объекты класса
+    с необходимыми атрибутами (атрибуты 'title' и 'price' есть есть всегда)
+    бесконечная глубина вложенности
     """
-
     def __init__(self, json_str: json or str):
         self.title = None
         self.price = 0
+
         if type(json_str) == str:
             atr_data = json.loads(json_str)
         else:
             atr_data = json_str
+
         for key, value in atr_data.items():
             if type(value) == dict:
-                self.__dict__[key] = self.Pole(value)
+                self.__dict__[key] = Pole(value)
             else:
                 self.__dict__[key] = value
+
         if self.title is None:
             raise ValueError("Ошибка: нет поля 'title'")
         if self.__dict__.setdefault('price', 0) < 0:
@@ -78,42 +54,23 @@ class Advert:
     def __repr__(self):
         return f'{self.title} | {self.price} ₽'
 
-    def get_atr(self):  # надо допилить
-        for key, value in self.__dict__.items():
-            print(type(value))
-            if isinstance(value, self.Pole):
-                self.zap_pole(value)
-            else:
-                yield key
-
-    def zap_pole(self, t_d):
-        for key, value in t_d.__dict__.items():
-            if isinstance(value, self.Pole):
-                self.zap_pole(value)
-            else:
-                yield key
-
     class Pole:
-        """
-        Вспомогательный класс для класса Advert
-        """
-
+        """Вспомогательный класс для класса Advert"""
         def __init__(self, d: dict):
-            for k, v in d.items():
-                self.__dict__[k] = v
+            for key, value in d.items():
+                if type(value) == dict:
+                    self.__dict__[key] = self.Pole(value)
+                else:
+                    self.__dict__[key] = value
+
+        def __repr__(self):
+            r = " | ".join(self.__dict__)
+            return f'{r}'
 
 
 class ColorizeMixin:
-    # color_code = {
-    #     'red': 31,
-    #     'green': 32,
-    #     'yellow': 33,
-    # }
-
-    # def __init__(self, color: str):
-    #     self.repr_color_code = self.color_code[color]
-
     def __repr__(self):
+        super()
         return f'\033[1;33;40m{self.title} | {self.price} ₽'
 
 
@@ -122,7 +79,7 @@ class ColorAdvert(ColorizeMixin, Advert):
 
 
 if __name__ == '__main__':
-    j1 = {
+    adv_dict_1 = {
         "title": "iPhone X",
         "price": 100,
         "location": {
@@ -130,7 +87,7 @@ if __name__ == '__main__':
             "metro_stations": ["Спортивная", "Гагаринская"]
         }
     }
-    j2 = {
+    adv_dict_2 = {
         "title": "Вельш-корги",
         "price": 1000,
         "class": "dogs",
@@ -138,7 +95,7 @@ if __name__ == '__main__':
             "address": "сельское поселение Ельдигинское, поселок санатория Тишково, 25"
         }
     }
-    lesson_str = """{
+    adv_str_1 = """{
         "title": "course python",
         "price": 50,
         "location": {
@@ -147,7 +104,7 @@ if __name__ == '__main__':
             "Пушкинская"]
             }
         }"""
-    adv_1 = """{
+    adv_str_2 = """{
         "title": "car",
         "price": 100500,
         "text": "едет с трудом",
@@ -156,14 +113,41 @@ if __name__ == '__main__':
             "metro_stations": ["Речной Вокзал"]
             }
         }"""
+    adv_str_3 = """{
+        "title": "Very interesting thing",
+        "price": 999999,
+        "specification": {
+            "type": {
+                "a1": "11",
+                "a2": "22"
+            },
+            "weight": {
+                "b1": "33",
+                "b2": "44"
+            },
+            "power": {
+                "b3": {"qe": "55", "qqw": 23},
+                "b4": {"as": "66", "erth": "sdf"}
+            }
+        },
+        "location": {
+            "address": "город Cходня, Лесная, 7",
+            "metro_stations": ["Речной Вокзал"]
+            }
+        }"""
 
-    my_advert_2 = ColorAdvert(adv_1)
-    print(my_advert_2)
+    # my_advert_1 = ColorAdvert(adv_dict_1)
+    # print(my_advert_1)
 
-    # my_advert_1 = Advert(lesson_str)
-    # print(type(my_advert_1))
-    # print(my_advert_1.__dict__)
-    # print(my_advert_1.location.metro_stations)
+    # my_advert_2 = AdvertRec(adv_str_1)
+    # print(my_advert_2.location)
+
+    my_advert_3 = AdvertRecurs(adv_str_3)
+    print(my_advert_3)
+    print(my_advert_3.__dict__)
+    print(f'обращение к полю b3: {my_advert_3.specification.power.b3}')
+    print(my_advert_3.specification)
+
     # print(my_advert_1.title)
     # print(f'цена: {my_advert_1.price}')
     # print(my_advert_1)
