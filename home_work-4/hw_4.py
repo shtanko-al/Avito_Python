@@ -3,8 +3,10 @@ from copy import deepcopy
 
 
 def ilen(iterable: Iterable):
-    """1) функция возвращает размер итерируемого объекта
-    или генератора, если объект пустой, то None"""
+    """
+    1) функция возвращает размер итерируемого объекта
+    или генератора, если объект пустой, то None
+    """
     n = 0
     for _ in iterable:
         n += 1
@@ -34,6 +36,20 @@ def distinct(iterable: Iterable):
     return temp_list
 
 
+def distinct_2(iterable: Iterable):
+    """
+    3) функция, которая удалит дубликаты, сохранив порядок
+    теоритически должна быстрее работать, чем distinct
+    """
+    temp_list = list()
+    temp_set = set()
+    for i in iterable:
+        if i not in temp_set:
+            temp_list.append(i)
+            temp_set.add(i)
+    return temp_list
+
+
 def groupby(key, iterable: Iterable):
     """
     4) функция делает из неупорядоченной последовательностей словарей,
@@ -53,7 +69,7 @@ def groupby(key, iterable: Iterable):
 
 
 def chunks(size: int, iterable: Iterable):
-    """5) функцию, которая разобьет последовательность на заданные куски"""
+    """5) функция, которая разобьет последовательность на заданные куски"""
     temp_list = list()
     result_list = list()
     n = 0
@@ -79,29 +95,6 @@ def first(iterable: Iterable):
         return None
 
 
-# def last(iterable: Iterable):
-#     #  7) функция получения последнего элемента или None
-#     if len(iterable) == 0:
-#         return None
-#     else:
-#         return iterable[len(iterable)-1]
-#
-# def last_2(iterable: Iterable):
-#     #  7) функция получения последнего элемента или None
-#     # работает с генераторами, но, наверно, можно лучше сделать
-#     my_iterator = iter(iterable)
-#     n = 0
-#     while True:
-#         try:
-#             temp = next(my_iterator)
-#             # print(temp)
-#             n += 1
-#         except StopIteration:
-#             if n == 0:
-#                 return None
-#             else:
-#                 return temp
-
 def last(iterable: Iterable):
     """7) функция возвращает последний элемент
     из итерируемого объекта или генератора
@@ -117,6 +110,7 @@ if __name__ == '__main__':
     test_list_1 = [-1, 0, 7, 8, [1, [2, 3]], 11, 12]
     test_list_2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     test_list_3 = ['a', 'b', 'c', 'd', 'e', 'f']
+    test_list_4 = [1, 7, 1, 5, 5, 1, 9, 8, 9, 15, 11]
     foo = (x for x in range(10))
     print(ilen(test_list_1))
     print(flatten(test_list_2))
@@ -140,3 +134,5 @@ if __name__ == '__main__':
     print()
     print('функция groupby: ', groupby('gender', users))
     print('функция groupby: ', groupby('age', users))
+    print('функция distinct: ', distinct(test_list_4))
+    print('функция distinct_2: ', distinct_2(test_list_4))
