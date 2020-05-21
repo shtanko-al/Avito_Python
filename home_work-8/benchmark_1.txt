@@ -1,0 +1,23 @@
+C:\Users\Sasha\AppData\Local\Programs\Python\Python38\python.exe C:/Users/Sasha/PycharmProjects/avito_hw8/test_import_pandas.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.2, pytest-5.4.2, py-1.8.1, pluggy-0.13.1
+benchmark: 3.2.3 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: C:\Users\Sasha\PycharmProjects\avito_hw8
+plugins: benchmark-3.2.3, cov-2.8.1
+collected 1 item
+
+test_import_pandas.py .                                                  [100%]
+
+
+------------------------------------------- benchmark: 1 tests ------------------------------------------
+Name (time in s)        Min     Max    Mean  StdDev  Median     IQR  Outliers     OPS  Rounds  Iterations
+---------------------------------------------------------------------------------------------------------
+test_prepare         6.4881  6.8668  6.5976  0.1526  6.5474  0.1070       1;1  0.1516       5          10
+---------------------------------------------------------------------------------------------------------
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean
+======================== 1 passed in 477.92s (0:07:57) ========================
+
+Process finished with exit code 0
