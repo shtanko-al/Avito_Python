@@ -1,9 +1,9 @@
-from import_pandas import csv_loader
+from import_pandas import loader_csv
 import pytest
 
 
 def test_prepare(benchmark):
-    benchmark.pedantic(csv_loader, args=('other_user_logs',), iterations=10, rounds=5, warmup_rounds=2)
+    benchmark.pedantic(loader_csv, args=('other_user_logs',), iterations=3, rounds=2, warmup_rounds=1)
 
 
 if __name__ == '__main__':
