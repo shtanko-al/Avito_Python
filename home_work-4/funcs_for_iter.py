@@ -28,25 +28,22 @@ def flatten(iterable: Iterable):
 
 
 def distinct(iterable: Iterable):
-    """3) функция, которая удалит дубликаты, сохранив порядок"""
-    temp_list = list()
-    for i in iterable:
-        if i not in temp_list:
-            temp_list.append(i)
-    return temp_list
-
-
-def distinct_2(iterable: Iterable):
     """
     3) функция, которая удалит дубликаты, сохранив порядок
-    теоритически должна быстрее работать, чем distinct
+    работатет со соловорями и множествами
     """
     temp_list = list()
     temp_set = set()
+    temp_list_for_not_iter = list()
     for i in iterable:
-        if i not in temp_set:
-            temp_list.append(i)
-            temp_set.add(i)
+        if not (isinstance(i, dict) or isinstance(i, set)):
+            if i not in temp_set:
+                temp_list.append(i)
+                temp_set.add(i)
+        else:
+            if i not in temp_list_for_not_iter:
+                temp_list.append(i)
+                temp_list_for_not_iter.append(i)
     return temp_list
 
 
