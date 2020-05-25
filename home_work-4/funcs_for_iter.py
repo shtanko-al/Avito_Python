@@ -19,7 +19,7 @@ def flatten(iterable: Iterable):
     """
     new_list = list()
     for i in iterable:
-        if not isinstance(i, Iterable):
+        if (not isinstance(i, Iterable)) or isinstance(i, str):
             new_list.append(i)
         else:
             tem_list = flatten(i)
