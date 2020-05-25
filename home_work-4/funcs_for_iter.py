@@ -1,11 +1,12 @@
-from typing import Iterable, Union, Optional, List, Tuple, Dict, Iterator
+from typing import Iterable
 from copy import deepcopy
 
 
 def ilen(iterable: Iterable):
-    """
-    1) функция возвращает размер итерируемого объекта
+    """1) функция возвращает размер итерируемого объекта
     или генератора, если объект пустой, то None
+    не понятно как обработать строку, вернуть ошибку или длину строки?
+
     """
     n = 0
     for _ in iterable:
@@ -13,18 +14,33 @@ def ilen(iterable: Iterable):
     return n
 
 
-def flatten(iterable: Iterable):
+def flatten(iterable: list or tuple):
     """
     2) функция flatten, которая из многоуровневого массива сделает одноуровневый
+    не понятно как обработать строку, вернуть ошибку или строку обратно?
     """
-    new_list = list()
+    if not isinstance(iterable, str):
+        new_list = list()
+        for i in iterable:
+            if (not isinstance(i, Iterable)) or isinstance(i, str):
+                new_list.append(i)
+            else:
+                tem_list = flatten(i)
+                new_list += tem_list
+        return new_list
+    else:
+        raise TypeError('функция не принимает строку')
+
+
+def distinct_2(iterable: Iterable):
+    """
+    3) функция, которая удалит дубликаты, сохранив порядок
+    """
+    temp_list = list()
     for i in iterable:
-        if (not isinstance(i, Iterable)) or isinstance(i, str):
-            new_list.append(i)
-        else:
-            tem_list = flatten(i)
-            new_list += tem_list
-    return new_list
+        if i not in temp_list:
+            temp_list.append(i)
+    return temp_list
 
 
 def distinct(iterable: Iterable):
@@ -54,14 +70,15 @@ def groupby(key, iterable: Iterable):
     """
     result_dict = dict()
     for i in iterable:
-        # print('value of i: ', i)
-        key_value = i[key]
-        # print('value of key: ', key_value)
-        if key_value not in result_dict:
-            result_dict[key_value] = []
-            result_dict[key_value].append(i)
+        if isinstance(i, dict):
+            key_value = i[key]
+            if key_value not in result_dict:
+                result_dict[key_value] = []
+                result_dict[key_value].append(i)
+            else:
+                result_dict[key_value].append(i)
         else:
-            result_dict[key_value].append(i)
+            raise TypeError
     return result_dict
 
 
@@ -85,43 +102,64 @@ def chunks(size: int, iterable: Iterable):
 
 def first(iterable: Iterable):
     """6) функция получения первого элемента или None"""
-    my_iterator = iter(iterable)
-    try:
-        return next(my_iterator)
-    except StopIteration:
-        return None
+    if isinstance(iterable, set):
+        raise TypeError('в множествах нет очередности')
+    elif isinstance(iterable, dict):
+        for i in iterable.items():
+            return {i[0]: i[1]}
+    else:
+        for i in iterable:
+            return i
 
 
 def last(iterable: Iterable):
     """7) функция возвращает последний элемент
     из итерируемого объекта или генератора
     или None, если объект пустой"""
-    i = None
-    for i in iterable:
-        pass
-    return i
+    if isinstance(iterable, set):
+        raise TypeError('в множествах нет очередности')
+    elif isinstance(iterable, dict):
+        i = None
+        for i in iterable.items():
+            pass
+        return {i[0]: i[1]}
+    else:
+        i = None
+        for i in iterable:
+            pass
+        return i
 
 
 if __name__ == '__main__':
     # проверки:
-    test_list_1 = [-1, 0, 7, 8, [1, [2, 3]], 11, 12]
+    test_list_1 = [-1, 0, 7, ['asdasd', 3, 'stgsth'], 8, [1, [2, 3]], 11, 12]
     test_list_2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    test_list_3 = ['a', 'b', 'c', 'd', 'e', 'f']
+    test_list_3 = ['a1', 'bbb', 'casd', 'dasd', 'e', 'f', 12]
     test_list_4 = [1, 7, 1, 5, 5, 1, 9, 8, 9, 15, 11]
+    test_list_5 = ['a', 'b', {1: 'a', 'abc': 1}, 'cde', 'd', {12, 'abra', 'asdf', 17}, 'e', 'f']
+    test_list_6 = {'wer': 11, 'a': 234, 2: 123}
+    test_list_7 = {5, 6, 'asd', 7, 9, 8, 5, 'adf'}
     foo = (x for x in range(10))
-    print(ilen(test_list_1))
-    print(flatten(test_list_2))
-    foo = (x for x in range(10))
+    print('проверка функции ilen: ', ilen(test_list_1))
+    print('проверка функции ilen от строки: ', ilen('test_list_1'))
+    print('проверка функции ilen от генератора: ', ilen((x for x in range(10))))
+    print(flatten(test_list_1))
     print('проверка функции chunks: ', chunks(3, test_list_1))
+    print('проверка функции chunks: ', chunks(3, test_list_2))
     print('проверка функции chunks: ', chunks(3, test_list_3))
+    print('проверка функции chunks: ', chunks(3, test_list_4))
+    print('проверка функции chunks: ', chunks(3, test_list_5))
+    print('проверка функции chunks: ', chunks(3, test_list_6))
     print()
-    print('проверка функции first: ', first(foo))
-    print('проверка функции first: ', first(test_list_3))
+    print('проверка функции first: ', first((x for x in range(10))))
+    print('проверка функции first: ', first(test_list_6))
     print('проверка функции first: ', first(range(0)))
+    # print('проверка функции first: ', first(test_list_7))
+
     print()
-    print('проверка функции last_3: ', last(range(0)))
-    print('проверка функции last_3: ', last(foo))
-    print('проверка функции last_3: ', last(test_list_3))
+    print('проверка функции last: ', last(test_list_1))
+    print('проверка функции last: ', last((x for x in range(10))))
+    print('проверка функции last: ', last(test_list_6))
 
     users = [
         {'gender': 'female', 'age': 33},
@@ -132,4 +170,4 @@ if __name__ == '__main__':
     print('функция groupby: ', groupby('gender', users))
     print('функция groupby: ', groupby('age', users))
     print('функция distinct: ', distinct(test_list_4))
-    print('функция distinct_2: ', distinct_2(test_list_4))
+    print('функция distinct_2: ', distinct((x for x in range(10))))
