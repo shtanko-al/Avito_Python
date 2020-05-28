@@ -19,12 +19,11 @@ class EchoServerClientProtocol(asyncio.Protocol):
         elif message == 'calendar':
             date = datetime.datetime.now()
             date_f = date.strftime("%d-%m-%Y %H:%M")
-            print(date_f)
-            print(type(date_f))
+            # print(date_f)
+            # print(type(date_f))
             self.transport.write(date_f.encode())
         elif message[0:4] == 'echo':
-            poz = message.find(' ')
-            mes = message[poz + 1:]
+            mes = message[5:]
             self.transport.write(mes.encode())
         else:
             mes = 'доступные комманды:\
